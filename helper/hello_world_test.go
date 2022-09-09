@@ -9,6 +9,15 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+func TestMain(m *testing.M) {
+	//before
+	fmt.Println("BEFORE UNIT TEST")
+
+	m.Run()
+
+	fmt.Println("AFTER UNIT TEST")
+}
+
 func TestHelloWorld(t *testing.T) {
 	result := HelloWorld(" Galih")
 
@@ -58,7 +67,7 @@ func TestHelloWorldAssert(t *testing.T) {
 }
 
 func TestHelloWorldRequire(t *testing.T) {
-	result := HelloWorld("Bro")
+	result := HelloWorld(" Broku")
 
 	require.Equal(t, "Hello Broku", result, "Result must be 'Hello Broku'")
 	fmt.Println("TestHelloWorld with require done")
@@ -72,4 +81,53 @@ func TestSkip(t *testing.T) {
 	result := HelloWorld("Bro")
 	require.Equal(t, "Hello Broku", result, "Result must be 'Hello Broku'")
 	fmt.Println("TestHelloWorld with require done")
+}
+
+//sub test
+func TestSubTest(t *testing.T) {
+	t.Run("Test 1", func(t *testing.T) {
+		result := HelloWorld(" Dunia")
+
+		require.Equal(t, "Hello Dunia", result, "Result must be hello test 1")
+	}) 
+
+	t.Run("Test 2", func(t *testing.T) {
+		result := HelloWorld(" Teman")
+
+		require.Equal(t, "Hello Teman", result, "Result must be hello test 2")
+	})
+}
+
+//table test
+
+func TestTableHello(t *testing.T) {
+	tests := []struct {
+		name string
+		request string
+		expected string
+	}{
+		{
+			name: "test_satu",
+			request: " salam",
+			expected: "Hello salam",
+		},
+		{
+			name: "test_dua",
+			request: " satu",
+			expected: "Hello satu",
+		},
+		{
+			name: "test_tiga",
+			request: " jiwa",
+			expected: "Hello jiwa",
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			result := HelloWorld(test.request)
+
+			require.Equal(t, test.expected, result)
+		})
+	}
 }
